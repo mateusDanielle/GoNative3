@@ -1,4 +1,4 @@
-import { call, put } from "redux-saga/effects";
+import { call, put, select } from "redux-saga/effects";
 
 import githubApi from "~/services/githubApi";
 
@@ -14,7 +14,13 @@ export function* addFavoriteRequest(action) {
       `/repos/${action.payload.repoName}`
     );
 
-    yield put(addFavoritesSuccess(response.data));
+    const favorites = yield select(state => state.favorites.data);
+
+    if (favorites.find(favorite => favorite.id === response.data.id)) {
+      yield put(addFavoritesError("O Repositório já existe"));
+    } else {
+      yield put(addFavoritesSuccess(response.data));
+    }
   } catch (err) {
     yield put(addFavoritesError("O Repositório não existe"));
   }
