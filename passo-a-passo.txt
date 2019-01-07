@@ -6,3 +6,6 @@ yarn add reactotron-redux
 
 //Trabalhar com cores
 yarn add color
+
+//Consumir APIs
+yarn add axios redux-saga
