@@ -9,3 +9,6 @@ yarn add color
 
 //Consumir APIs
 yarn add axios redux-saga
+
+//Redux saga no reactotron
+yarn add reactotron-redux-saga
