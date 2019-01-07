@@ -7,7 +7,8 @@ import {
   StatusBar,
   Text,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
 
 import { connect } from "react-redux";
@@ -26,7 +27,9 @@ class Main extends Component {
       navigate: PropTypes.func
     }).isRequired,
     addFavoritesRequest: PropTypes.func.isRequired,
-    favoritesCount: PropTypes.number.isRequired
+    favoritesCount: PropTypes.number.isRequired,
+    error: PropTypes.oneOfType([null, PropTypes.string]),
+    loading: PropTypes.bool.isRequired
   };
 
   state = {
@@ -44,6 +47,8 @@ class Main extends Component {
     if (!repoNameInput.length) return;
 
     addFavoritesRequest(repoNameInput);
+
+    this.setState({ repoNameInput: "" });
   };
 
   render() {
@@ -56,6 +61,10 @@ class Main extends Component {
           <Text style={styles.description}>
             Comece adicionando alguns repositórios aos seus favoritos.
           </Text>
+
+          {!!this.props.error && (
+            <Text style={styles.error}>{this.props.error}</Text>
+          )}
 
           <View style={styles.form}>
             <TextInput
@@ -72,7 +81,14 @@ class Main extends Component {
               onPress={this.addRepository}
               activeOpacity={0.6}
             >
-              <Text style={styles.buttonText}>Adicionar aos favoritos.</Text>
+              {this.props.loading ? (
+                <ActivityIndicator
+                  size={"small"}
+                  color={styles.loading.color}
+                />
+              ) : (
+                <Text style={styles.buttonText}>Adicionar aos favoritos.</Text>
+              )}
             </TouchableOpacity>
           </View>
         </View>
@@ -90,7 +106,9 @@ class Main extends Component {
 }
 
 const mapStateToProps = state => ({
-  favoritesCount: state.favorites.length
+  favoritesCount: state.favorites.data.length,
+  error: state.favorites.error,
+  loading: state.favorites.loading
 });
 
 const mapDispatchToProps = dispatch =>

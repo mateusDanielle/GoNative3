@@ -49,6 +49,15 @@ const styles = StyleSheet.create({
     color: colors.darkTransparent,
     fontWeight: "bold"
   },
+  error: {
+    fontWeight: "bold",
+    color: colors.danger,
+    alignSelf: "center",
+    marginTop: metrics.baseMargin
+  },
+  loading: {
+    color: colors.darkTransparent
+  },
   footer: {
     paddingBottom: metrics.basePadding
   },
